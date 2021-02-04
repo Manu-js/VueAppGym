@@ -1,29 +1,45 @@
 <template>
-  <div id="app">
-    <v-app>
-      <hello-world />
-    </v-app>
-  </div>
+   <v-app id="app">
+      <template v-if="!$route.path.includes('login')">
+         <v-navigation-drawer v-model="drawer" fixed app>
+            <v-list dense>
+               <div @click="drawer = false" to="/login">
+                  <div>login</div>
+               </div>
+               <div @click="drawer = false"> contact </div>
+               <div @click="drawer = false"> Cosis </div>
+            </v-list>
+         </v-navigation-drawer>
+         <div @click.stop="drawer = !drawer;"></div>
+      </template>
+      <v-content>
+         <keep-alive :include="['Login']">
+            <router-view></router-view>
+         </keep-alive>
+      </v-content>
+   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld,
-  },
+   data: () => ({
+      drawer: false,
+   }),
+   props: {
+      source: String,
+   },
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<script>
+export default {
+   name: 'App',
+   data() {
+      return {
+         drawer: false,
+      };
+   },
+};
+</script>
+
+<style></style>
