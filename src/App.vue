@@ -1,35 +1,58 @@
 <template>
-   <v-app id="app">
-      <template v-if="!$route.path.includes('login')">
-         <v-navigation-drawer v-model="drawer" fixed app>
-            <v-list dense>
-               <div @click="drawer = false" to="/login">
-                  <div>login</div>
-               </div>
-               <div @click="drawer = false"> contact </div>
-               <div @click="drawer = false"> Cosis </div>
-            </v-list>
-         </v-navigation-drawer>
-         <div @click.stop="drawer = !drawer;"></div>
+   <v-app id="app" class="mx-auto overflow-hidden">
+       <template v-if="!$route.path.includes('login')">
+    <v-app-bar
+      color="deep-purple"
+      dark
+    >
+      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+
+      <v-toolbar-title>Title</v-toolbar-title>
+    </v-app-bar>
+
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      temporary
+    >
+      <v-list
+        nav
+        dense
+      >
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple--text text--accent-4"
+        >
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-home</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title> <router-link to="/main">About</router-link></v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title><router-link to="/Cosis">Todos</router-link></v-list-item-title>
+          </v-list-item>
+            <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title @click="logout()">Salir</v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
       </template>
-      <v-content>
+      <v-main>
          <keep-alive :include="['Login']">
             <router-view></router-view>
          </keep-alive>
-      </v-content>
+      </v-main>
    </v-app>
 </template>
-
-<script>
-export default {
-   data: () => ({
-      drawer: false,
-   }),
-   props: {
-      source: String,
-   },
-};
-</script>
 
 <script>
 export default {
@@ -39,7 +62,15 @@ export default {
          drawer: false,
       };
    },
-};
+    methods: {
+      logout(){
+         this.drawer = false
+         this.$session.destroy()
+         this.$router.push('/login')
+      }
+    }
+}
+
 </script>
 
 <style></style>

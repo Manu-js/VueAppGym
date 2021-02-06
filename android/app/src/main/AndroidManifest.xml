@@ -15,6 +15,7 @@
             android:name="app.gimnasio.vue.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:screenOrientation="landscape"
             android:launchMode="singleTask">
 
             <intent-filter>

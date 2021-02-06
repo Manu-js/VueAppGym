@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div @click="prev">prev</div>
-    <div @click="next">next</div>
+    <div class="flex justify-center">
+      <div class="" @click="prev">prev</div>
+      <div class="" @click="next">next</div>
+    </div>
     <div
       v-for="(day, index) in Object.entries(week)"
       :key="index"
@@ -49,18 +51,9 @@ export default {
     return {
       timestamp: '',
       headers: [
-        {
-          text: 'Lunes',
-          sortable: false,
-          value: 'lunes',
-        },
+        { text: 'Lunes',sortable: false,value: 'lunes'},
         { text: 'Martes', sortable: false, value: 'martes' },
-        {
-          text: 'Miercoles',
-
-          sortable: false,
-          value: 'miercoles',
-        },
+        { text: 'Miercoles',sortable: false,value: 'miercoles'},
         { text: 'Jueves', sortable: false, value: 'jueves' },
         { text: 'Viernes', sortable: false, value: 'viernes' },
         { text: 'Sabado', sortable: false, value: 'sabado' },
@@ -165,6 +158,9 @@ export default {
   mounted() {
     this.getNow(true);
   },
+   beforeCreate: function () {
+     console.log(this.$session.exists())
+  },
   methods: {
     async refilldata() {
       this.test = (
@@ -218,7 +214,7 @@ export default {
       } else if (day === 'domingo') {
         this.offset = 6;
       }
-      console.log('offset = ', this.offset);
+
       this.today = this.today.subtract(this.offset, 'days');
       const auxToday = this.today.clone();
       this.week.lunes = auxToday.format('DD-MM');

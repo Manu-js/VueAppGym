@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import vuetify from './plugins/vuetify';
+import './assets/styles/index.css';
+import VueSession from 'vue-session'
 
 import Login from './components/Login';
 import Main from './components/HelloWorld';
@@ -9,6 +11,11 @@ import Cosis from './components/Cosis';
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
+
+var options = {
+  persist: true
+}
+Vue.use(VueSession, options)
 
 const router = new VueRouter({
 

@@ -1,10 +1,10 @@
 <template>
    <v-app id="inspire">
-    <v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
-            <div>
-                <v-tabs v-model="tab" show-arrows background-color="deep-purple accent-4" icons-and-text dark grow>
-                    <v-tabs-slider color="purple darken-4"></v-tabs-slider>
-                    <v-tab v-for="i in tabs" :key="i">
+            <div class="flex h-screen">
+                <div class="m-auto">
+                <v-tabs v-model="tab" class="bg-red">
+                    <v-tabs-slider></v-tabs-slider>
+                    <v-tab v-for="(i, index) in tabs" :key="index">
                         <v-icon large>{{ i.icon }}</v-icon>
                         <div class="caption py-1">{{ i.name }}</div>
                     </v-tab>
@@ -60,8 +60,7 @@
                         </v-card>
                     </v-tab-item>
                 </v-tabs>
-            </div>
-        </v-dialog>
+            </div></div>
    </v-app>
 </template>
 
@@ -75,14 +74,25 @@ export default {
     passwordMatch() {
       return () => this.password === this.verify || "Password must match";
     }
+},
+  beforeCreate() {
+    console.log(this.$session.exists());
+    if(this.$session.exists()){
+        console.log("awdawdawd")
+        this.$router.push("/main").catch(()=>{});
+    }
   },
 methods: {
+    
     validate() {
       if (this.$refs.loginForm.validate()) {
-          alert("Login Mocked")
-          this.$router.push( '/main' )
+          this.$session.start()
+          this.$session.set('jwt', "awdawdadw")
+          this.$router.push("/main").catch(()=>{});
+
         // submit form to server/API here...
       } else{
+          this.$session.exists()
           alert("mal mal maaaaal")
       }
     },
