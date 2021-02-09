@@ -65,6 +65,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
    name: 'Login',
    props: {
@@ -76,20 +78,31 @@ export default {
     }
 },
   beforeCreate() {
-    console.log(this.$session.exists());
-    if(this.$session.exists()){
-        console.log("awdawdawd")
-        this.$router.push("/main").catch(()=>{});
-    }
+      console.log("viva el login")
+      if (this.$session.start()){
+          this.$router.push("/main").catch(()=>{});
+      }
   },
 methods: {
     
-    validate() {
+   async validate() {
       if (this.$refs.loginForm.validate()) {
-          this.$session.start()
-          this.$session.set('jwt', "awdawdadw")
+            this.test = (
+                await axios.post('http://51.210.87.212:3000/login',{
+                params:{
+                    username: "pepe2@test.com",
+                    password: "1234test"
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                })
+            ).data;
+            
+          await this.$session.start()
+          await this.$session.set('jwt', this.test.token)
           this.$router.push("/main").catch(()=>{});
-
+          
         // submit form to server/API here...
       } else{
           this.$session.exists()

@@ -3,6 +3,7 @@
     <div class="flex justify-center">
       <div class="" @click="prev">prev</div>
       <div class="" @click="next">next</div>
+      <div @click="refillData"> awdawdawd </div>
     </div>
     <div
       v-for="(day, index) in Object.entries(week)"
@@ -162,9 +163,20 @@ export default {
      console.log(this.$session.exists())
   },
   methods: {
-    async refilldata() {
+    async refillData() {
+      let token = await this.$session.get('jwt')
       this.test = (
-        await axios.get('https://jsonplaceholder.typicode.com/todos/')
+        await axios.post('http://51.210.87.212:3000/citas/getWeek',{
+
+            fchIni: "123123",
+            fchFin: "123123",
+            servicio: "0",
+          
+          headers: {
+              'Content-Type': 'application/json',
+              'Authoritation': 'Bearer ' + token
+          }
+        })
       ).data;
       this.remapValues();
     },
