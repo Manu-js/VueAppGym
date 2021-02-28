@@ -1,13 +1,17 @@
 <template>
   <div class="grid">
     <div class>Aqui van a venir las citas ya cogidas
-      <span>el nombre de la cita</span>
-      <v-btn>Borrar</v-btn>
+      <ul>
+        <li v-for="(item, index) in citasActivas" :key="index" >
+          <span>{{item}}</span>
+          <v-btn @click="removeCita(item.id)">Borrar</v-btn>
+        </li>
+      </ul>
     </div>
     <div>
     <v-select
       v-model="select"
-      :items="items"
+      :items="users"
       item-text="state"
       item-value="abbr"
       label="Select"
@@ -27,6 +31,7 @@ export default {
     return {
       select: { state: 'Florida', abbr: 'FL' },
       citasActivas: [],
+      users:[],
       items: [
         { state: '123', abbr: 'FL' },
         { state: '1234', abbr: 'GA' },
@@ -49,7 +54,7 @@ export default {
 
       }*/
     },
-    async deleteCitas(){
+    async removeCita(){
                  /* this.citasActivas = (
                 await axios.post('http://51.210.87.212:3000/citas/deleteCita',{
                     id: "pepe2@test.com",
@@ -58,6 +63,18 @@ export default {
                 }
                 })
             ).data;
+            */
+    },
+    async getUsers(){
+        /* this.users = (
+              await axios.post('http://51.210.87.212:3000/usuarios/getUsers',{
+                    id: "pepe2@test.com",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                })
+            ).data;
+            */
     }
 };
 
