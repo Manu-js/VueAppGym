@@ -84,7 +84,7 @@ export default {
         sabado: '',
         domingo: '',
       },
-      mock: [
+      citas: [
     {
         "id_cita": 1,
         "id_usuario": 1,
@@ -215,8 +215,8 @@ export default {
       this.test = (
         await axios.post('http://51.210.87.212:3000/citas/getweek',{
 
-            fchIni: "1610582400",
-            fchFin: "1640582400",
+            fchIni: this.today,
+            fchFin: this.week.domingo,
             servicio: "0",
         },{
           headers: {
@@ -228,8 +228,8 @@ export default {
       this.remapValues();
     },
     remapValues(){
-      for (let index = 0; index < this.mock.length; index++) {
-        const element = this.mock[index];
+      for (let index = 0; index < this.citas.length; index++) {
+        const element = this.citas[index];
         let dayNumber = (moment.unix(element["fecha"]).isoWeekday())
         let hour = ((moment.unix(element["fecha"]).format("hh")))
         let newValue = this.hours[hour][dayNumber] + 1
@@ -240,11 +240,11 @@ export default {
     save(vart, vert, value) {
       let newValue = this.hours[vart][vert] = value + 1;
       this.$set(this.hours[vart], vert, newValue)
-      /*this.mock = (
+      /*this.citas = (
       await axios.post('http://51.210.87.212:3000/citas/saveCita',{
 
-            fchIni: "1610582400",
-            fchFin: "1640582400",
+            fchIni: this.today,
+            fchFin: this.week.domingo,
             servicio: "0",
         },{
           headers: {

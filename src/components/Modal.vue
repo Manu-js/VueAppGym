@@ -32,13 +32,6 @@ export default {
       select: { state: 'Florida', abbr: 'FL' },
       citasActivas: [],
       users:[],
-      items: [
-        { state: '123', abbr: 'FL' },
-        { state: '1234', abbr: 'GA' },
-        { state: '125', abbr: 'NE' },
-        { state: '126', abbr: 'CA' },
-        { state: 'New 61', abbr: 'NY' },
-      ],
     };
   },
    async getCitas() {
