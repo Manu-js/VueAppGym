@@ -3,7 +3,6 @@
     <div class="flex justify-center">
       <div class="" @click="prev">prev</div>
       <div class="" @click="next">next</div>
-      <div @click="refillData"> awdawdawd </div>
     </div>
     <div
       v-for="(day, index) in Object.entries(week)"
@@ -15,7 +14,7 @@
     <v-data-table
       :headers="headers"
       :items="hours"
-      items-per-page= 20
+      :items-per-page="20" 
       hide-default-footer
       hide-default-header
     >
@@ -203,9 +202,11 @@ export default {
   },
   mounted() {
     this.getNow(true);
+    this.refillData()
   },
    beforeCreate: function () {
      console.log(this.$session.exists())
+     
   },
   methods: {
     async refillData() {
@@ -227,16 +228,30 @@ export default {
       this.remapValues();
     },
     remapValues(){
-      this.mock.forEach(element => {
-        console.log(element["fecha"])
+      for (let index = 0; index < this.mock.length; index++) {
+        const element = this.mock[index];
         let dayNumber = (moment.unix(element["fecha"]).isoWeekday())
         let hour = ((moment.unix(element["fecha"]).format("hh")))
-        console.log(dayNumber, hour)
-        this.hours[hour][dayNumber] ++
-      });
+        let newValue = this.hours[hour][dayNumber] + 1
+        this.$set(this.hours[hour], dayNumber, newValue)
+        
+      }
     },
     save(vart, vert, value) {
-      this.hours[vart][vert] = value + 1;
+      let newValue = this.hours[vart][vert] = value + 1;
+      this.$set(this.hours[vart], vert, newValue)
+      /*this.mock = (
+      await axios.post('http://51.210.87.212:3000/citas/saveCita',{
+
+            fchIni: "1610582400",
+            fchFin: "1640582400",
+            servicio: "0",
+        },{
+          headers: {
+              'Content-Type': 'application/json',
+              'Authoritation': 'Bearer ' + token
+          },
+        }).data)*/
     },
     cancel() {
       this.snack = true;

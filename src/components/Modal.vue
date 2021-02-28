@@ -1,9 +1,12 @@
 <template>
-  <div>
-    <div>{{ value }}</div>
+  <div class="grid">
+    <div class>Aqui van a venir las citas ya cogidas
+      <span>el nombre de la cita</span>
+      <v-btn>Borrar</v-btn>
+    </div>
+    <div>
     <v-select
       v-model="select"
-      :hint="`${select.state}, ${select.abbr}`"
       :items="items"
       item-text="state"
       item-value="abbr"
@@ -12,6 +15,7 @@
       return-object
       single-line
     ></v-select>
+    </div>
   </div>
 </template>
 <script>
@@ -22,6 +26,7 @@ export default {
   data() {
     return {
       select: { state: 'Florida', abbr: 'FL' },
+      citasActivas: [],
       items: [
         { state: '123', abbr: 'FL' },
         { state: '1234', abbr: 'GA' },
@@ -31,5 +36,29 @@ export default {
       ],
     };
   },
+   async getCitas() {
+           /* this.citasActivas = (
+                await axios.post('http://51.210.87.212:3000/login',{
+                    id: "pepe2@test.com",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                })
+            ).data;
+      if (this.citasActivas){
+
+      }*/
+    },
+    async deleteCitas(){
+                 /* this.citasActivas = (
+                await axios.post('http://51.210.87.212:3000/citas/deleteCita',{
+                    id: "pepe2@test.com",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                })
+            ).data;
+    }
 };
+
 </script>
