@@ -15,6 +15,7 @@
     <v-data-table
       :headers="headers"
       :items="hours"
+      items-per-page= 20
       hide-default-footer
       hide-default-header
     >
@@ -24,14 +25,14 @@
             <td v-for="(header, key) in headers" :key="key">
               <v-edit-dialog
                 large
-                @save="save(idx, header, item[header.value])"
+                @save="save(idx, key, item[key])"
                 @cancel="cancel"
                 @open="open"
                 @close="close"
               >
-                {{ item[header.value] }}
+                {{ item[key] }}
                 <template #input>
-                  <modal :value="item[header.value]" />
+                  <modal :value="item[key]" />
                 </template>
               </v-edit-dialog>
             </td>
@@ -42,7 +43,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+//import axios from 'axios';
 import moment from 'moment';
 import Modal from './Modal.vue';
 
@@ -61,87 +62,19 @@ export default {
         { text: 'Domingo', sortable: false, value: 'domingo' },
       ],
       hours: [
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
-        {
-          lunes: 0,
-          martes: 0,
-          miercoles: 0,
-          jueves: 0,
-          viernes: 0,
-          sabado: 0,
-          domingo: 0,
-        },
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0]
       ],
       week: {
         lunes: '',
@@ -152,6 +85,118 @@ export default {
         sabado: '',
         domingo: '',
       },
+      mock: [
+    {
+        "id_cita": 1,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha": 1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 2,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 3,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 4,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 5,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 6,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 7,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 8,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 9,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    },
+    {
+        "id_cita": 10,
+        "id_usuario": 1,
+        "id_empleado": 0,
+        "id_servicio": 0,
+        "id_producto": 0,
+        "fecha":  1614249686,
+        "es_media": 0,
+        "lugar": "test",
+        "nombre_completo": "cliente1"
+    }
+],
       today: moment(),
       offset: 0,
     };
@@ -164,24 +209,34 @@ export default {
   },
   methods: {
     async refillData() {
-      let token = await this.$session.get('jwt')
+      /*let token = await this.$session.get('jwt')
+      console.log(token)
       this.test = (
-        await axios.post('http://51.210.87.212:3000/citas/getWeek',{
+        await axios.post('http://51.210.87.212:3000/citas/getweek',{
 
-            fchIni: "123123",
-            fchFin: "123123",
+            fchIni: "1610582400",
+            fchFin: "1640582400",
             servicio: "0",
-          
+        },{
           headers: {
               'Content-Type': 'application/json',
               'Authoritation': 'Bearer ' + token
-          }
+          },
         })
-      ).data;
+      ).data;*/
       this.remapValues();
     },
+    remapValues(){
+      this.mock.forEach(element => {
+        console.log(element["fecha"])
+        let dayNumber = (moment.unix(element["fecha"]).isoWeekday())
+        let hour = ((moment.unix(element["fecha"]).format("hh")))
+        console.log(dayNumber, hour)
+        this.hours[hour][dayNumber] ++
+      });
+    },
     save(vart, vert, value) {
-      this.hours[vart][vert.value] = value + 1;
+      this.hours[vart][vert] = value + 1;
     },
     cancel() {
       this.snack = true;

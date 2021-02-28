@@ -89,10 +89,8 @@ methods: {
       if (this.$refs.loginForm.validate()) {
             this.test = (
                 await axios.post('http://51.210.87.212:3000/login',{
-                params:{
                     username: "pepe2@test.com",
-                    password: "1234test"
-                },
+                    password: "1234test",
                 headers: {
                     'Content-Type': 'application/json'
                 }
