@@ -29,9 +29,9 @@
                 @open="open"
                 @close="close"
               >
-                {{ item[key] }}
+                {{ item[key].length }}
                 <template #input>
-                  <modal :value="item[key]" />
+                  <modal :value="item[key].length" />
                 </template>
               </v-edit-dialog>
             </td>
@@ -42,7 +42,7 @@
   </div>
 </template>
 <script>
-//import axios from 'axios';
+import axios from 'axios';
 import moment from 'moment';
 import Modal from './Modal.vue';
 
@@ -84,118 +84,8 @@ export default {
         sabado: '',
         domingo: '',
       },
-      citas: [
-    {
-        "id_cita": 1,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha": 1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 2,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 3,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 4,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 5,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 6,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 7,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 8,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 9,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    },
-    {
-        "id_cita": 10,
-        "id_usuario": 1,
-        "id_empleado": 0,
-        "id_servicio": 0,
-        "id_producto": 0,
-        "fecha":  1614249686,
-        "es_media": 0,
-        "lugar": "test",
-        "nombre_completo": "cliente1"
-    }
-],
+      weekAux:[],
+      
       today: moment(),
       offset: 0,
     };
@@ -210,21 +100,22 @@ export default {
   },
   methods: {
     async refillData() {
-      /*let token = await this.$session.get('jwt')
-      console.log(token)
-      this.test = (
+      let token = await this.$session.get('jwt')
+      console.log(this.today)
+      this.citas = (
         await axios.post('http://51.210.87.212:3000/citas/getweek',{
 
             fchIni: this.today,
             fchFin: this.week.domingo,
             servicio: "0",
+            token: token
         },{
           headers: {
               'Content-Type': 'application/json',
               'Authoritation': 'Bearer ' + token
           },
         })
-      ).data;*/
+      ).data;
       this.remapValues();
     },
     remapValues(){
@@ -232,26 +123,31 @@ export default {
         const element = this.citas[index];
         let dayNumber = (moment.unix(element["fecha"]).isoWeekday())
         let hour = ((moment.unix(element["fecha"]).format("hh")))
-        let newValue = this.hours[hour][dayNumber] + 1
+        let newValue = this.hours[hour][dayNumber].push(element["fecha"])
         this.$set(this.hours[hour], dayNumber, newValue)
         
       }
     },
-    save(vart, vert, value) {
-      let newValue = this.hours[vart][vert] = value + 1;
-      this.$set(this.hours[vart], vert, newValue)
-      /*this.citas = (
-      await axios.post('http://51.210.87.212:3000/citas/saveCita',{
-
-            fchIni: this.today,
-            fchFin: this.week.domingo,
+    async save(vart, vert) {
+      let token = await this.$session.get('jwt')
+      //let newCita = moment(this.weekAux[vert]).add(this.vart, 'hours');
+      console.log(vart, vert)
+      
+      this.citas = (
+      await axios.post('http://51.210.87.212:3000/citas/addcita',{
+            fecha: this.weekAux[vert] + (vart*60*1000),
             servicio: "0",
+            id_usuario: 2,
+            id_empleado: 2,
+            id_servicio: 0,
+            id_producto: 0,
+            es_media: 0,
+            token: token
         },{
           headers: {
               'Content-Type': 'application/json',
-              'Authoritation': 'Bearer ' + token
           },
-        }).data)*/
+        }).data)
     },
     cancel() {
       this.snack = true;
@@ -306,6 +202,14 @@ export default {
       this.week.viernes = auxToday.add(1, 'days').format('DD-MM');
       this.week.sabado = auxToday.add(1, 'days').format('DD-MM');
       this.week.domingo = auxToday.add(1, 'days').format('DD-MM');
+
+      this.weekAux.push(auxToday.unix());
+      this.weekAux.push(auxToday.add(1, 'days').unix());
+      this.weekAux.push(auxToday.add(1, 'days').unix());
+      this.weekAux.push(auxToday.add(1, 'days').unix());
+      this.weekAux.push(auxToday.add(1, 'days').unix());
+      this.weekAux.push(auxToday.add(1, 'days').unix());
+      this.weekAux.push(auxToday.add(1, 'days').unix());
     },
     getDayName(dateStr, locale) {
       const date = new Date(dateStr);
@@ -315,15 +219,14 @@ export default {
       console.log('Dialog closed');
     },
     next() {
-      console.log(this.today.format('DD-MM'));
       this.today = this.today.clone().add(7, 'days');
-      console.log(this.today.format('DD-MM'));
       this.getNow();
+      this.refillData()
     },
     prev() {
       this.today = this.today.clone().subtract(7, 'days');
-      console.log(this.today);
       this.getNow();
+      this.refillData()
     },
   },
 };
