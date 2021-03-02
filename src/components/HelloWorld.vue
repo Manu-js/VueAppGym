@@ -20,18 +20,18 @@
     >
       <template #body="{ items, headers }">
         <tbody>
-          <tr v-for="(item, idx) in items" :key="idx">
-            <td v-for="(header, key) in headers" :key="key">
+          <tr v-for="(item, hourCalendar) in items" :key="hourCalendar">
+            <td v-for="(header, dayCalendar) in headers" :key="dayCalendar">
               <v-edit-dialog
                 large
-                @save="save(idx, key, item[key])"
+                @save="save(hourCalendar, dayCalendar, item[dayCalendar])"
                 @cancel="cancel"
                 @open="open"
                 @close="close"
               >
-                {{ item[key].length }}
+                {{ item[dayCalendar] }}
                 <template #input>
-                  <modal :value="item[key].length" />
+                  <modal :value="item[dayCalendar].length" />
                 </template>
               </v-edit-dialog>
             </td>
@@ -105,14 +105,13 @@ export default {
       this.citas = (
         await axios.post('http://51.210.87.212:3000/citas/getweek',{
 
-            fchIni: this.today,
-            fchFin: this.week.domingo,
+            fchIni: this.weekAux[0],
+            fchFin: this.weekAux[6],
             servicio: "0",
             token: token
         },{
           headers: {
               'Content-Type': 'application/json',
-              'Authoritation': 'Bearer ' + token
           },
         })
       ).data;
@@ -122,26 +121,35 @@ export default {
       for (let index = 0; index < this.citas.length; index++) {
         const element = this.citas[index];
         let dayNumber = (moment.unix(element["fecha"]).isoWeekday())
-        let hour = ((moment.unix(element["fecha"]).format("hh")))
-        let newValue = this.hours[hour][dayNumber].push(element["fecha"])
-        this.$set(this.hours[hour], dayNumber, newValue)
-        
+        let hour =parseInt(moment.unix(element["fecha"]).format("hh"))
+        let newValue = this.hours[hour][dayNumber] + 1
+        this.$set(this.hours[hour],[dayNumber], newValue)
       }
     },
-    async save(vart, vert) {
+    resetHour(toReset){
+      var m = toReset.utcOffset(0);
+      m.set({hour:0,minute:0,second:0,millisecond:0})
+      m.toISOString()
+      m.format()
+      return m
+    },
+    async save(hora, dia) {
       let token = await this.$session.get('jwt')
-      //let newCita = moment(this.weekAux[vert]).add(this.vart, 'hours');
-      console.log(vart, vert)
+      
+      let date = (this.resetHour(moment.unix(this.weekAux[dia]))) 
+      console.log(date)
+      date = date.add((hora+ 7), 'hours').format('x');
       
       this.citas = (
       await axios.post('http://51.210.87.212:3000/citas/addcita',{
-            fecha: this.weekAux[vert] + (vart*60*1000),
+            fecha: date/1000,
             servicio: "0",
             id_usuario: 2,
             id_empleado: 2,
             id_servicio: 0,
             id_producto: 0,
             es_media: 0,
+            lugar: "w",
             token: token
         },{
           headers: {
@@ -202,14 +210,14 @@ export default {
       this.week.viernes = auxToday.add(1, 'days').format('DD-MM');
       this.week.sabado = auxToday.add(1, 'days').format('DD-MM');
       this.week.domingo = auxToday.add(1, 'days').format('DD-MM');
-
-      this.weekAux.push(auxToday.unix());
-      this.weekAux.push(auxToday.add(1, 'days').unix());
-      this.weekAux.push(auxToday.add(1, 'days').unix());
-      this.weekAux.push(auxToday.add(1, 'days').unix());
-      this.weekAux.push(auxToday.add(1, 'days').unix());
-      this.weekAux.push(auxToday.add(1, 'days').unix());
-      this.weekAux.push(auxToday.add(1, 'days').unix());
+      const auxToday2 = this.today.clone();
+      this.weekAux.push(auxToday2.unix());
+      this.weekAux.push(auxToday2.add(1, 'days').unix());
+      this.weekAux.push(auxToday2.add(1, 'days').unix());
+      this.weekAux.push(auxToday2.add(1, 'days').unix());
+      this.weekAux.push(auxToday2.add(1, 'days').unix());
+      this.weekAux.push(auxToday2.add(1, 'days').unix());
+      this.weekAux.push(auxToday2.add(1, 'days').unix());
     },
     getDayName(dateStr, locale) {
       const date = new Date(dateStr);
