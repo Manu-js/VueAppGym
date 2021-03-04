@@ -14,7 +14,7 @@
     <v-data-table
       :headers="headers"
       :items="hours"
-      :items-per-page="20" 
+      :items-per-page="17" 
       hide-default-footer
       hide-default-header
     >
@@ -31,7 +31,7 @@
               >
                 {{ item[dayCalendar] }}
                 <template #input>
-                  <modal :value="item[dayCalendar].length" />
+                  <modal :citas="citas" :auxSearch="dayCalendar + '' + hourCalendar" />
                 </template>
               </v-edit-dialog>
             </td>
@@ -73,6 +73,11 @@ export default {
        [0,0,0,0,0,0,0],
        [0,0,0,0,0,0,0],
        [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
        [0,0,0,0,0,0,0]
       ],
       week: {
@@ -88,20 +93,20 @@ export default {
       
       today: moment(),
       offset: 0,
+      citas: []
     };
   },
   mounted() {
     this.getNow(true);
     this.refillData()
   },
-   beforeCreate: function () {
-     console.log(this.$session.exists())
+  beforeCreate: function () {
      
   },
   methods: {
     async refillData() {
       let token = await this.$session.get('jwt')
-      console.log(this.today)
+      this.resetCalendar()
       this.citas = (
         await axios.post('http://51.210.87.212:3000/citas/getweek',{
 
@@ -120,10 +125,11 @@ export default {
     remapValues(){
       for (let index = 0; index < this.citas.length; index++) {
         const element = this.citas[index];
-        let dayNumber = (moment.unix(element["fecha"]).isoWeekday())
-        let hour =parseInt(moment.unix(element["fecha"]).format("hh"))
+        let dayNumber = (moment.unix(element["fecha"]).isoWeekday() - 1)
+        let hour = parseInt(moment.unix(element["fecha"]).format("HH")-8)
         let newValue = this.hours[hour][dayNumber] + 1
         this.$set(this.hours[hour],[dayNumber], newValue)
+        this.citas[index].position = dayNumber + "" + hour
       }
     },
     resetHour(toReset){
@@ -137,7 +143,6 @@ export default {
       let token = await this.$session.get('jwt')
       
       let date = (this.resetHour(moment.unix(this.weekAux[dia]))) 
-      console.log(date)
       date = date.add((hora+ 7), 'hours').format('x');
       
       this.citas = (
@@ -156,6 +161,7 @@ export default {
               'Content-Type': 'application/json',
           },
         }).data)
+        await this.refillData()
     },
     cancel() {
       this.snack = true;
@@ -211,13 +217,13 @@ export default {
       this.week.sabado = auxToday.add(1, 'days').format('DD-MM');
       this.week.domingo = auxToday.add(1, 'days').format('DD-MM');
       const auxToday2 = this.today.clone();
-      this.weekAux.push(auxToday2.unix());
-      this.weekAux.push(auxToday2.add(1, 'days').unix());
-      this.weekAux.push(auxToday2.add(1, 'days').unix());
-      this.weekAux.push(auxToday2.add(1, 'days').unix());
-      this.weekAux.push(auxToday2.add(1, 'days').unix());
-      this.weekAux.push(auxToday2.add(1, 'days').unix());
-      this.weekAux.push(auxToday2.add(1, 'days').unix());
+      this.weekAux.push(this.resetHour(auxToday2).unix());
+      this.weekAux.push(this.resetHour(auxToday2.add(1, 'days')).unix());
+      this.weekAux.push(this.resetHour(auxToday2.add(1, 'days')).unix());
+      this.weekAux.push(this.resetHour(auxToday2.add(1, 'days')).unix());
+      this.weekAux.push(this.resetHour(auxToday2.add(1, 'days')).unix());
+      this.weekAux.push(this.resetHour(auxToday2.add(1, 'days')).unix());
+      this.weekAux.push(this.resetHour(auxToday2.add(1, 'days')).unix());
     },
     getDayName(dateStr, locale) {
       const date = new Date(dateStr);
@@ -236,6 +242,28 @@ export default {
       this.getNow();
       this.refillData()
     },
+    resetCalendar() {
+      this.hours = [
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0]
+      ]
+    }
   },
 };
 </script>
