@@ -1,7 +1,7 @@
 <template>
   <div class="flex ">
     <div class="w-8 ml-3">
-      <span style="margin-bottom: 37px">hora</span>
+      <div style="margin-bottom: 49px">hora</div>
       <div style="height:48px" v-for="(hour, index) in hours" :key="index">{{index + 7}}</div>
     </div>
     <div class="w-full">
@@ -14,7 +14,8 @@
       :key="index"
       style="display: inline-block; font-size: 0.75rem; width: calc(100% / 7)"
     > 
-      {{ (day[0]) }} - {{ (day[1]) }}
+      <div>{{ (day[0]) }} </div> 
+         {{ (day[1]) }}
     </div>
     <v-data-table
       :headers="headers"
