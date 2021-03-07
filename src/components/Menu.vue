@@ -27,8 +27,8 @@
               <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
             <v-list-item-title> 
-            <RouterLink class="header__nav__link" :to="{ name: 'main' }"
-                >About</RouterLink>
+            <RouterLink class="header__nav__link" :to="{ name: 'Main' }"
+                >Citas</RouterLink>
                
             </v-list-item-title>
           </v-list-item>
@@ -39,7 +39,17 @@
             </v-list-item-icon>
             <v-list-item-title>
             <RouterLink class="header__nav__link" :to="{ name: 'Cosis' }"
-                >cosis</RouterLink>
+                >Usuarios</RouterLink>
+               <!-- <router-link to="/Cosis">Todos</router-link> -->
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+            <RouterLink class="header__nav__link" :to="{ name: 'UserList' }"
+                >Lista Usuarios</RouterLink>
                <!-- <router-link to="/Cosis">Todos</router-link> -->
             </v-list-item-title>
           </v-list-item>

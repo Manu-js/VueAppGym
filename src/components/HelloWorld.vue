@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div class="flex ">
+    <div class="w-8 ml-3">
+      <span style="margin-bottom: 37px">hora</span>
+      <div style="height:48px" v-for="(hour, index) in hours" :key="index">{{index + 7}}</div>
+    </div>
+    <div class="w-full">
     <div class="flex justify-center">
       <div class="" @click="prev">prev</div>
       <div class="" @click="next">next</div>
@@ -8,8 +13,8 @@
       v-for="(day, index) in Object.entries(week)"
       :key="index"
       style="display: inline-block; font-size: 0.75rem; width: calc(100% / 7)"
-    >
-      {{ day }}
+    > 
+      {{ (day[0]) }} - {{ (day[1]) }}
     </div>
     <v-data-table
       :headers="headers"
@@ -31,7 +36,7 @@
               >
                 {{ item[dayCalendar] }}
                 <template #input>
-                  <modal :citas="citas" :auxSearch="dayCalendar + '' + hourCalendar" />
+                  <modal :citas="citas" @updateSelect=updateSelect :auxSearch="dayCalendar + '' + hourCalendar" />
                 </template>
               </v-edit-dialog>
             </td>
@@ -39,6 +44,7 @@
         </tbody>
       </template>
     </v-data-table>
+  </div>
   </div>
 </template>
 <script>
@@ -93,7 +99,8 @@ export default {
       
       today: moment(),
       offset: 0,
-      citas: []
+      citas: [],
+      selectUser: []
     };
   },
   mounted() {
@@ -122,6 +129,9 @@ export default {
       ).data;
       this.remapValues();
     },
+    updateSelect(e){
+      this.selectUser = e
+    },
     remapValues(){
       for (let index = 0; index < this.citas.length; index++) {
         const element = this.citas[index];
@@ -140,6 +150,7 @@ export default {
       return m
     },
     async save(hora, dia) {
+      console.log("viva españa")
       let token = await this.$session.get('jwt')
       
       let date = (this.resetHour(moment.unix(this.weekAux[dia]))) 
@@ -149,11 +160,11 @@ export default {
       await axios.post('http://51.210.87.212:3000/citas/addcita',{
             fecha: date/1000,
             servicio: "0",
-            id_usuario: 2,
-            id_empleado: 2,
-            id_servicio: 0,
-            id_producto: 0,
-            es_media: 0,
+            idUsuario: this.selectUser.idUsuario,
+            idEmpleado: 2,
+            idServicio: 0,
+            idProducto: 0,
+            esMedia: 0,
             lugar: "w",
             token: token
         },{
@@ -217,6 +228,7 @@ export default {
       this.week.sabado = auxToday.add(1, 'days').format('DD-MM');
       this.week.domingo = auxToday.add(1, 'days').format('DD-MM');
       const auxToday2 = this.today.clone();
+      this.weekAux = []
       this.weekAux.push(this.resetHour(auxToday2).unix());
       this.weekAux.push(this.resetHour(auxToday2.add(1, 'days')).unix());
       this.weekAux.push(this.resetHour(auxToday2.add(1, 'days')).unix());

@@ -1,18 +1,18 @@
 <template>
   <div class="grid">
-    <div class>pepe
+    <div class>
       <ul>
         <li v-for="(item, index) in filtrado()" :key="index" >
-          <span>{{item.id_cita}}</span> ---
-          <span>{{item.id_usuario}}</span>
-          <v-btn @click="removeCita(item.id_cita)">Borrar</v-btn>
+          <span>{{item.idCita}}</span> ---
+          <span>{{item.nombreCompleto}}</span>
+          <v-btn @click="removeCita(item.idCita)">Borrar</v-btn>
         </li>
       </ul>
     </div>
     <div>
     <v-select
       v-model="select"
-      :items="getUsers()"
+      :items="users"
       item-text="nombreCompleto"
       item-value="abbr"
       label="Select"
@@ -31,12 +31,23 @@ export default {
     citas: Array,
     auxSearch: String
   },
-  data() {
+  data() {  
     return {
-      select: { state: 'Florida', abbr: 'FL' },
+      select: [],
       citasActivas: [],
       users:[],
     };
+  },
+  watch: {
+      select: {
+        deep: true,
+         handler() {
+           this.$emit('updateSelect', this.select)
+         },
+      },
+	},
+  mounted() {
+    this.getUsers()
   },
     methods: {
   filtrado() {

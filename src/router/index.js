@@ -10,8 +10,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "Login" */ "../components/Login")
     },
     {
-        path: "/main",
-        name: "main",
+        path: "/Main",
+        name: "Main",
         component: () =>
             import(/* webpackChunkName: "AppUserList" */ "../components/HelloWorld.vue"),
         alias: "/"
@@ -21,6 +21,12 @@ const routes = [
         name: "Cosis",
         component: () =>
             import(/* webpackChunkName: "AppContact" */ "../components/Cosis.vue")
+    },
+    {
+        path: "/UserList",
+        name: "UserList",
+        component: () =>
+            import(/* webpackChunkName: "AppContact" */ "../components/UserList.vue")
     }
 ];
 
